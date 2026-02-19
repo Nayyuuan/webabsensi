@@ -1,0 +1,1 @@
+// Logic moved to index.html to avoid CORS issues on local file execution.
