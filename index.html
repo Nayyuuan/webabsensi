@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Data Absensi Siswa SMKN 5 Malang</title>
-  
+
   <!-- Icon Library (Lucide) -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  
+
   <!-- Leaflet CSS & JS (Untuk Peta Interaktif) -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <style>
     :root {
-      --primary-blue: #1e40af; 
-      --secondary-blue: #3b82f6; 
+      --primary-blue: #1e40af;
+      --secondary-blue: #3b82f6;
       --dark-blue: #172554;
-      --bg-blue: #eff6ff; 
+      --bg-blue: #eff6ff;
       --surface: #ffffff;
       --text-main: #1e293b;
       --text-muted: #64748b;
@@ -40,7 +43,8 @@
     }
 
     .app-container {
-      max-width: 1400px; /* Diperlebar karena kolom bertambah */
+      max-width: 1400px;
+      /* Diperlebar karena kolom bertambah */
       margin: 0 auto;
       padding: 2rem;
     }
@@ -92,9 +96,17 @@
       opacity: 1;
     }
 
-    .toast.error { border-left-color: var(--danger); }
-    .toast.warning { border-left-color: var(--warning); }
-    .toast.success { border-left-color: var(--success); }
+    .toast.error {
+      border-left-color: var(--danger);
+    }
+
+    .toast.warning {
+      border-left-color: var(--warning);
+    }
+
+    .toast.success {
+      border-left-color: var(--success);
+    }
 
     /* Filter Section */
     .controls {
@@ -127,7 +139,8 @@
       gap: 0.5rem;
     }
 
-    input, select {
+    input,
+    select {
       padding: 0.75rem 1rem;
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -137,7 +150,8 @@
       width: 100%;
     }
 
-    input:focus, select:focus {
+    input:focus,
+    select:focus {
       outline: none;
       border-color: var(--secondary-blue);
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
@@ -159,7 +173,7 @@
       gap: 0.5rem;
       transition: all 0.2s;
     }
-    
+
     .btn-reset:hover {
       background-color: #f1f5f9;
       color: var(--danger);
@@ -182,7 +196,8 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1300px; /* Diperlebar untuk memuat banyak kolom */
+      min-width: 1300px;
+      /* Diperlebar untuk memuat banyak kolom */
     }
 
     thead {
@@ -192,15 +207,17 @@
 
     /* Header Grouping Style */
     th.group-datang {
-      background-color: #1e3a8a; /* Biru agak gelap */
+      background-color: #1e3a8a;
+      /* Biru agak gelap */
       text-align: center;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
-    
+
     th.group-pulang {
-      background-color: var(--dark-blue); /* Biru paling gelap */
+      background-color: var(--dark-blue);
+      /* Biru paling gelap */
       text-align: center;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     th {
@@ -209,9 +226,12 @@
       font-weight: 600;
       font-size: 0.9rem;
       letter-spacing: 0.05em;
-      border-right: 1px solid rgba(255,255,255,0.1);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
     }
-    th:last-child { border-right: none; }
+
+    th:last-child {
+      border-right: none;
+    }
 
     td {
       padding: 1rem;
@@ -220,7 +240,10 @@
       vertical-align: middle;
       font-size: 0.9rem;
     }
-    td:last-child { border-right: none; }
+
+    td:last-child {
+      border-right: none;
+    }
 
     tbody tr:hover {
       background-color: #f8fafc;
@@ -286,11 +309,36 @@
       white-space: nowrap;
     }
 
-    .badge-late { background-color: #fef2f2; color: var(--danger); border: 1px solid #fecaca; }
-    .badge-ontime { background-color: #ecfdf5; color: var(--success); border: 1px solid #a7f3d0; }
-    .badge-forgot { background-color: #fffbeb; color: var(--warning); border: 1px solid #fde68a; }
-    .badge-pulang { background-color: #f3f4f6; color: #4b5563; border: 1px solid #d1d5db; }
-    .badge-neutral { background-color: #f8fafc; color: #94a3b8; border: 1px dashed #cbd5e1; font-weight: 500;}
+    .badge-late {
+      background-color: #fef2f2;
+      color: var(--danger);
+      border: 1px solid #fecaca;
+    }
+
+    .badge-ontime {
+      background-color: #ecfdf5;
+      color: var(--success);
+      border: 1px solid #a7f3d0;
+    }
+
+    .badge-forgot {
+      background-color: #fffbeb;
+      color: var(--warning);
+      border: 1px solid #fde68a;
+    }
+
+    .badge-pulang {
+      background-color: #f3f4f6;
+      color: #4b5563;
+      border: 1px solid #d1d5db;
+    }
+
+    .badge-neutral {
+      background-color: #f8fafc;
+      color: #94a3b8;
+      border: 1px dashed #cbd5e1;
+      font-weight: 500;
+    }
 
     /* Location Button */
     .btn-location {
@@ -307,39 +355,135 @@
       font-family: inherit;
       white-space: nowrap;
     }
-    .btn-location:hover { text-decoration: underline; }
+
+    .btn-location:hover {
+      text-decoration: underline;
+    }
 
     /* Modals */
     .modal-overlay {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background-color: rgba(0, 0, 0, 0.7);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 2000; opacity: 0; visibility: hidden;
-      transition: all 0.3s ease; backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(4px);
     }
-    .modal-overlay.show { opacity: 1; visibility: visible; }
-    .modal-content {
-      background: white; width: 90%; max-width: 800px;
-      border-radius: 16px; overflow: hidden; transform: scale(0.95);
-      transition: transform 0.3s ease; display: flex; flex-direction: column;
-    }
-    .modal-content.image-view { background: transparent; box-shadow: none; max-width: 1000px; align-items: center; }
-    .modal-overlay.show .modal-content { transform: scale(1); }
-    .modal-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-    .image-modal-header { position: absolute; top: 20px; right: 20px; z-index: 2010; }
-    
-    .btn-close { background: white; border: none; cursor: pointer; color: var(--text-muted); padding: 0.5rem; border-radius: 50%; display: flex; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    .btn-close:hover { background-color: #f1f5f9; color: var(--danger); }
-    
-    #map-container { height: 400px; width: 100%; background-color: #f8fafc; }
-    #full-image { max-width: 100%; max-height: 85vh; border-radius: 8px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); background: #f0f0f0; }
-    
-    .footer { margin-top: 2rem; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
 
-    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: white;
+      width: 90%;
+      max-width: 800px;
+      border-radius: 16px;
+      overflow: hidden;
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-content.image-view {
+      background: transparent;
+      box-shadow: none;
+      max-width: 1000px;
+      align-items: center;
+    }
+
+    .modal-overlay.show .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .image-modal-header {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 2010;
+    }
+
+    .btn-close {
+      background: white;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 0.5rem;
+      border-radius: 50%;
+      display: flex;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-close:hover {
+      background-color: #f1f5f9;
+      color: var(--danger);
+    }
+
+    #map-container {
+      height: 400px;
+      width: 100%;
+      background-color: #f8fafc;
+    }
+
+    #full-image {
+      max-width: 100%;
+      max-height: 85vh;
+      border-radius: 8px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      background: #f0f0f0;
+    }
+
+    .footer {
+      margin-top: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
+
 <body>
 
   <div class="app-container">
@@ -366,9 +510,10 @@
         <label><i data-lucide="filter" style="width: 14px;"></i> Jenis Absen Datang</label>
         <select id="statusFilter">
           <option value="all">Semua Status</option>
-          <option value="ontime">Tepat Waktu</option>
-          <option value="late">Terlambat</option>
-          <option value="forgot">Lupa Absen</option>
+          <option value="ontimein">Masuk</option>
+          <option value="late">Masuk (Terlambat)</option>
+          <option value="ontimeout">Pulang</option>
+          <option value="forgot">Pulang (Meninggalkan KBM)</option>
         </select>
       </div>
       <button class="btn-reset" id="resetBtn">
@@ -402,9 +547,9 @@
           </thead>
           <tbody id="attendanceBody">
             <tr>
-                <td colspan="10" style="text-align:center; padding: 3rem; color: #64748b;">
-                    Memuat data absensi...
-                </td>
+              <td colspan="10" style="text-align:center; padding: 3rem; color: #64748b;">
+                Memuat data absensi...
+              </td>
             </tr>
           </tbody>
         </table>
@@ -430,11 +575,12 @@
   <!-- Image Modal -->
   <div class="modal-overlay" id="imageModal" onclick="closeImageModal(event)">
     <div class="image-modal-header">
-         <button class="btn-close" onclick="closeImageModal(event, true)"><i data-lucide="x" width="24"></i></button>
+      <button class="btn-close" onclick="closeImageModal(event, true)"><i data-lucide="x" width="24"></i></button>
     </div>
     <div class="modal-content image-view">
       <img src="" id="full-image" alt="Bukti Absensi">
-      <div style="color: white; margin-top: 1rem; font-weight: 500; text-shadow: 0 2px 4px rgba(0,0,0,0.5);" id="image-caption"></div>
+      <div style="color: white; margin-top: 1rem; font-weight: 500; text-shadow: 0 2px 4px rgba(0,0,0,0.5);"
+        id="image-caption"></div>
     </div>
   </div>
 
@@ -446,9 +592,9 @@
 
   <script>
     let globalData = [];
-    let map = null; 
-    let currentMarker = null; 
-    
+    let map = null;
+    let currentMarker = null;
+
     // --- Data Demo ---
     const MOCK_DATA_FALLBACK = [
       { id: 101, username: "naysella_y", nama: "Naysella Yuan Marsha", foto_url: "https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=300", status: "Terlambat", tanggal: "19 Februari 2026", jam: "11.03", hari: "Kamis", lokasi_lat: -6.175392, lokasi_long: 106.827153 },
@@ -464,23 +610,23 @@
     const resetBtn = document.getElementById('resetBtn');
 
     function showToast(message, type = 'info') {
-        const toast = document.getElementById('toast');
-        document.getElementById('toast-message').textContent = message;
-        toast.className = `toast show ${type}`;
-        setTimeout(() => toast.className = 'toast', 5000);
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-message').textContent = message;
+      toast.className = `toast show ${type}`;
+      setTimeout(() => toast.className = 'toast', 5000);
     }
 
     function parseIndonesianDate(dateStr, timeStr) {
-        if (!dateStr) return new Date();
-        const months = { 'Januari':0, 'Februari':1, 'Maret':2, 'April':3, 'Mei':4, 'Juni':5, 'Juli':6, 'Agustus':7, 'September':8, 'Oktober':9, 'November':10, 'Desember':11 };
-        try {
-            const parts = dateStr.split(' '); 
-            if (parts.length < 3) return new Date(); 
-            const day = parseInt(parts[0]);
-            const month = months[parts[1]] !== undefined ? months[parts[1]] : 0;
-            const year = parseInt(parts[2]);
-            return new Date(year, month, day, 0, 0); // Ignore time for filtering
-        } catch (e) { return new Date(); }
+      if (!dateStr) return new Date();
+      const months = { 'Januari': 0, 'Februari': 1, 'Maret': 2, 'April': 3, 'Mei': 4, 'Juni': 5, 'Juli': 6, 'Agustus': 7, 'September': 8, 'Oktober': 9, 'November': 10, 'Desember': 11 };
+      try {
+        const parts = dateStr.split(' ');
+        if (parts.length < 3) return new Date();
+        const day = parseInt(parts[0]);
+        const month = months[parts[1]] !== undefined ? months[parts[1]] : 0;
+        const year = parseInt(parts[2]);
+        return new Date(year, month, day, 0, 0); // Ignore time for filtering
+      } catch (e) { return new Date(); }
     }
 
     function getStatusBadge(status) {
@@ -502,83 +648,83 @@
       }
       return `<span style="color: #cbd5e1; font-size: 0.8rem;">-</span>`;
     }
-    
+
     function getPhotoHtml(url, name, type) {
-        if(url && url.trim() !== '') {
-            return `
+      if (url && url.trim() !== '') {
+        return `
             <div class="thumb-wrapper" onclick="openImageModal('${url}', '${name} (${type})')">
                 <img src="${url}" class="thumb-img" alt="Foto" onerror="this.src='https://via.placeholder.com/150x60?text=No+Img'">
             </div>`;
-        }
-        return `<span style="color:#cbd5e1; font-size:0.8rem">-</span>`;
+      }
+      return `<span style="color:#cbd5e1; font-size:0.8rem">-</span>`;
     }
 
     // --- Fungsi Pengelompokan Data (Datang & Pulang) ---
     function groupDataByDay(dataArray) {
-        const grouped = {};
+      const grouped = {};
 
-        dataArray.forEach(item => {
-            // Kunci grouping: username + tanggal
-            const key = `${item.username}_${item.tanggal}`;
-            
-            if (!grouped[key]) {
-                grouped[key] = {
-                    username: item.username,
-                    nama: item.nama,
-                    hari: item.hari,
-                    tanggal: item.tanggal,
-                    datang: null,
-                    pulang: null
-                };
-            }
+      dataArray.forEach(item => {
+        // Kunci grouping: username + tanggal
+        const key = `${item.username}_${item.tanggal}`;
 
-            const isPulang = (item.status || "").toLowerCase().includes("pulang");
-            const record = {
-                jam: item.jam,
-                foto_url: item.foto_url,
-                status: item.status,
-                lat: item.lokasi_lat,
-                long: item.lokasi_long
-            };
-
-            if (isPulang) {
-                grouped[key].pulang = record;
-            } else {
-                grouped[key].datang = record;
-            }
-        });
-
-        return Object.values(grouped);
-    }
-
-    window.openImageModal = function(url, name) {
-        if (!url) return;
-        document.getElementById('full-image').src = url;
-        document.getElementById('image-caption').textContent = name;
-        document.getElementById('imageModal').classList.add('show');
-    }
-
-    window.closeImageModal = function(e, force = false) {
-        const modal = document.getElementById('imageModal');
-        if (force || e.target === modal) {
-            modal.classList.remove('show');
-            setTimeout(() => document.getElementById('full-image').src = '', 300);
+        if (!grouped[key]) {
+          grouped[key] = {
+            username: item.username,
+            nama: item.nama,
+            hari: item.hari,
+            tanggal: item.tanggal,
+            datang: null,
+            pulang: null
+          };
         }
+
+        const isPulang = (item.status || "").toLowerCase().includes("pulang");
+        const record = {
+          jam: item.jam,
+          foto_url: item.foto_url,
+          status: item.status,
+          lat: item.lokasi_lat,
+          long: item.lokasi_long
+        };
+
+        if (isPulang) {
+          grouped[key].pulang = record;
+        } else {
+          grouped[key].datang = record;
+        }
+      });
+
+      return Object.values(grouped);
     }
 
-    window.openMap = function(lat, lng, name) {
-        const mapModal = document.getElementById('mapModal');
-        mapModal.classList.add('show');
-        document.getElementById('mapModalTitle').textContent = `Lokasi: ${name}`;
-        if (!map) {
-            map = L.map('map-container').setView([lat, lng], 15);
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        } else { map.setView([lat, lng], 15); }
-        if (currentMarker) map.removeLayer(currentMarker);
-        currentMarker = L.marker([lat, lng]).addTo(map).bindPopup(`<b>${name}</b>`).openPopup();
-        setTimeout(() => map.invalidateSize(), 200);
+    window.openImageModal = function (url, name) {
+      if (!url) return;
+      document.getElementById('full-image').src = url;
+      document.getElementById('image-caption').textContent = name;
+      document.getElementById('imageModal').classList.add('show');
     }
-    window.closeMap = function() { document.getElementById('mapModal').classList.remove('show'); }
+
+    window.closeImageModal = function (e, force = false) {
+      const modal = document.getElementById('imageModal');
+      if (force || e.target === modal) {
+        modal.classList.remove('show');
+        setTimeout(() => document.getElementById('full-image').src = '', 300);
+      }
+    }
+
+    window.openMap = function (lat, lng, name) {
+      const mapModal = document.getElementById('mapModal');
+      mapModal.classList.add('show');
+      document.getElementById('mapModalTitle').textContent = `Lokasi: ${name}`;
+      if (!map) {
+        map = L.map('map-container').setView([lat, lng], 15);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+      } else { map.setView([lat, lng], 15); }
+      if (currentMarker) map.removeLayer(currentMarker);
+      currentMarker = L.marker([lat, lng]).addTo(map).bindPopup(`<b>${name}</b>`).openPopup();
+      setTimeout(() => map.invalidateSize(), 200);
+    }
+    window.closeMap = function () { document.getElementById('mapModal').classList.remove('show'); }
     document.getElementById('mapModal').addEventListener('click', (e) => { if (e.target.id === 'mapModal') closeMap(); });
 
     // Render tabel dari data yang sudah di-group
@@ -588,19 +734,19 @@
         tableBody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 3rem; color: #94a3b8;">Data tidak ditemukan.</td></tr>`;
       } else {
         const rowsHtml = groupedData.map(group => {
-            // Data Datang
-            const d_jam = group.datang ? group.datang.jam : '-';
-            const d_status = group.datang ? group.datang.status : 'Belum Absen';
-            const d_loc = group.datang ? getLocationHtml(group.datang.lat, group.datang.long, group.nama) : '-';
-            const d_foto = group.datang ? getPhotoHtml(group.datang.foto_url, group.nama, 'Datang') : '-';
+          // Data Datang
+          const d_jam = group.datang ? group.datang.jam : '-';
+          const d_status = group.datang ? group.datang.status : 'Belum Absen';
+          const d_loc = group.datang ? getLocationHtml(group.datang.lat, group.datang.long, group.nama) : '-';
+          const d_foto = group.datang ? getPhotoHtml(group.datang.foto_url, group.nama, 'Datang') : '-';
 
-            // Data Pulang
-            const p_jam = group.pulang ? group.pulang.jam : '-';
-            const p_status = group.pulang ? group.pulang.status : 'Belum Absen';
-            const p_loc = group.pulang ? getLocationHtml(group.pulang.lat, group.pulang.long, group.nama) : '-';
-            const p_foto = group.pulang ? getPhotoHtml(group.pulang.foto_url, group.nama, 'Pulang') : '-';
+          // Data Pulang
+          const p_jam = group.pulang ? group.pulang.jam : '-';
+          const p_status = group.pulang ? group.pulang.status : 'Belum Absen';
+          const p_loc = group.pulang ? getLocationHtml(group.pulang.lat, group.pulang.long, group.nama) : '-';
+          const p_foto = group.pulang ? getPhotoHtml(group.pulang.foto_url, group.nama, 'Pulang') : '-';
 
-            return `
+          return `
             <tr>
               <td>
                   <div class="user-cell">
@@ -636,8 +782,8 @@
       }
       if (window.lucide) window.lucide.createIcons();
     }
-      if (window.lucide) window.lucide.createIcons();
-    
+    if (window.lucide) window.lucide.createIcons();
+
 
     function filterData() {
       // 1. Grouping seluruh data mentah terlebih dahulu
@@ -645,9 +791,21 @@
 
       // 2. Terapkan filter pada data yang sudah di-group
       const searchTerm = searchInput.value.toLowerCase();
-      const startVal = startDateInput.value ? new Date(startDateInput.value) : null;
-      const endVal = endDateInput.value ? new Date(endDateInput.value) : null;
-      if (endVal) endVal.setHours(23, 59, 59);
+
+      // -- KODE PERBAIKAN TANGGAL MULAI DI SINI --
+      let startVal = null;
+      if (startDateInput.value) {
+        const [year, month, day] = startDateInput.value.split('-');
+        startVal = new Date(year, month - 1, day, 0, 0, 0);
+      }
+
+      let endVal = null;
+      if (endDateInput.value) {
+        const [year, month, day] = endDateInput.value.split('-');
+        endVal = new Date(year, month - 1, day, 23, 59, 59);
+      }
+      // -- BATAS KODE PERBAIKAN --
+
       const statusVal = statusFilter.value;
 
       const filtered = groupedAll.filter(group => {
@@ -661,10 +819,11 @@
         // Filter berdasarkan status DATANG (bisa disesuaikan jika ingin filter kepulangan juga)
         let matchesStatus = true;
         if (statusVal !== "all") {
-            const lowerStatus = group.datang ? group.datang.status.toLowerCase() : "";
-            if (statusVal === "late") matchesStatus = lowerStatus.includes("terlambat");
-            else if (statusVal === "ontime") matchesStatus = lowerStatus.includes("tepat waktu");
-            else if (statusVal === "forgot") matchesStatus = lowerStatus.includes("lupa") || lowerStatus.includes("tanpa");
+          const lowerStatus = group.datang ? group.datang.status.toLowerCase() : "";
+          if (statusVal === "late") matchesStatus = lowerStatus.includes("masuk (terlambat)");
+          else if (statusVal === "ontimein") matchesStatus = lowerStatus.includes("masuk (tepat waktu)");
+          else if (statusVal === "ontimeout") matchesStatus = lowerStatus.includes("pulang (tepat waktu)");
+          else if (statusVal === "forgot") matchesStatus = lowerStatus.includes("pulang (meninggalkan kbm)");
         }
 
         return matchesName && matchesDateRange && matchesStatus;
@@ -674,24 +833,24 @@
     }
 
     function resetFilters() {
-        searchInput.value = ''; startDateInput.value = ''; endDateInput.value = ''; statusFilter.value = 'all';
-        filterData(); showToast("Filter telah direset.", "success");
+      searchInput.value = ''; startDateInput.value = ''; endDateInput.value = ''; statusFilter.value = 'all';
+      filterData(); showToast("Filter telah direset.", "success");
     }
 
     async function fetchData() {
-        if (window.location.protocol === 'file:') {
-            globalData = MOCK_DATA_FALLBACK; filterData();
-            showToast("Mode Demo Aktif.", "warning"); return;
-        }
-        try {
-            const response = await fetch('api.php');
-            if (!response.ok) throw new Error("HTTP Error");
-            const jsonData = await response.json();
-            if (jsonData.error) { globalData = MOCK_DATA_FALLBACK; showToast("Gagal db, mode demo.", "error"); } 
-            else { globalData = jsonData; }
-        } catch (error) {
-            globalData = MOCK_DATA_FALLBACK; showToast("Mode Demo Aktif.", "warning");
-        } finally { filterData(); }
+      if (window.location.protocol === 'file:') {
+        globalData = MOCK_DATA_FALLBACK; filterData();
+        showToast("Mode Demo Aktif.", "warning"); return;
+      }
+      try {
+        const response = await fetch('api.php');
+        if (!response.ok) throw new Error("HTTP Error");
+        const jsonData = await response.json();
+        if (jsonData.error) { globalData = MOCK_DATA_FALLBACK; showToast("Gagal db, mode demo.", "error"); }
+        else { globalData = jsonData; }
+      } catch (error) {
+        globalData = MOCK_DATA_FALLBACK; showToast("Mode Demo Aktif.", "warning");
+      } finally { filterData(); }
     }
 
     searchInput.addEventListener('input', filterData);
@@ -705,4 +864,5 @@
 
   </script>
 </body>
+
 </html>
