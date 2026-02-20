@@ -507,12 +507,12 @@
         <input type="date" id="endDateInput">
       </div>
       <div class="input-group">
-        <label><i data-lucide="filter" style="width: 14px;"></i> Jenis Absen Datang</label>
+        <label><i data-lucide="filter" style="width: 14px;"></i> Jenis Absen</label>
         <select id="statusFilter">
           <option value="all">Semua Status</option>
-          <option value="ontimein">Masuk</option>
+          <option value="ontimein">Masuk (Tepat Waktu)</option>
           <option value="late">Masuk (Terlambat)</option>
-          <option value="ontimeout">Pulang</option>
+          <option value="ontimeout">Pulang (Tepat Waktu)</option>
           <option value="forgot">Pulang (Meninggalkan KBM)</option>
         </select>
       </div>
@@ -816,14 +816,25 @@
         if (startVal) matchesDateRange = matchesDateRange && groupDate >= startVal;
         if (endVal) matchesDateRange = matchesDateRange && groupDate <= endVal;
 
-        // Filter berdasarkan status DATANG (bisa disesuaikan jika ingin filter kepulangan juga)
         let matchesStatus = true;
         if (statusVal !== "all") {
-          const lowerStatus = group.datang ? group.datang.status.toLowerCase() : "";
-          if (statusVal === "late") matchesStatus = lowerStatus.includes("masuk (terlambat)");
-          else if (statusVal === "ontimein") matchesStatus = lowerStatus.includes("masuk (tepat waktu)");
-          else if (statusVal === "ontimeout") matchesStatus = lowerStatus.includes("pulang (tepat waktu)");
-          else if (statusVal === "forgot") matchesStatus = lowerStatus.includes("pulang (meninggalkan kbm)");
+          // Siapkan dua variabel untuk membaca status datang dan pulang
+          const statusDatang = group.datang ? (group.datang.status || "").toLowerCase() : "";
+          const statusPulang = group.pulang ? (group.pulang.status || "").toLowerCase() : "";
+
+          if (statusVal === "late") {
+            // Cek di data Datang
+            matchesStatus = statusDatang.includes("terlambat");
+          } else if (statusVal === "ontimein") {
+            // Cek di data Datang
+            matchesStatus = statusDatang.includes("tepat waktu");
+          } else if (statusVal === "ontimeout") {
+            // Cek di data Pulang
+            matchesStatus = statusPulang.includes("pulang") || statusPulang.includes("tepat waktu");
+          } else if (statusVal === "forgot") {
+            // Cek di data Pulang
+            matchesStatus = statusPulang.includes("meninggalkan kbm") || statusPulang.includes("lupa") || statusPulang.includes("tanpa");
+          }
         }
 
         return matchesName && matchesDateRange && matchesStatus;
