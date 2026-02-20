@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -15,9 +14,10 @@
 
   <style>
     :root {
-      --primary-blue: #1e40af; /* Royal Blue */
-      --secondary-blue: #3b82f6; /* Bright Blue */
-      --bg-blue: #eff6ff; /* Lightest Blue */
+      --primary-blue: #1e40af; 
+      --secondary-blue: #3b82f6; 
+      --dark-blue: #172554;
+      --bg-blue: #eff6ff; 
       --surface: #ffffff;
       --text-main: #1e293b;
       --text-muted: #64748b;
@@ -40,7 +40,7 @@
     }
 
     .app-container {
-      max-width: 1200px;
+      max-width: 1400px; /* Diperlebar karena kolom bertambah */
       margin: 0 auto;
       padding: 2rem;
     }
@@ -73,7 +73,7 @@
       right: 20px;
       background: var(--surface);
       border-left: 4px solid var(--secondary-blue);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
       padding: 1rem 1.5rem;
       border-radius: 8px;
       display: flex;
@@ -134,8 +134,6 @@
       font-size: 0.95rem;
       background-color: #f8fafc;
       transition: all 0.3s ease;
-      color: var(--text-main);
-      font-family: inherit;
       width: 100%;
     }
 
@@ -146,7 +144,6 @@
       background-color: var(--surface);
     }
 
-    /* Reset Button */
     .btn-reset {
       padding: 0.75rem 1rem;
       border: 1px solid var(--border);
@@ -185,12 +182,25 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 900px; /* Sedikit diperlebar untuk mengakomodasi gambar */
+      min-width: 1300px; /* Diperlebar untuk memuat banyak kolom */
     }
 
     thead {
       background-color: var(--primary-blue);
       color: white;
+    }
+
+    /* Header Grouping Style */
+    th.group-datang {
+      background-color: #1e3a8a; /* Biru agak gelap */
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    th.group-pulang {
+      background-color: var(--dark-blue); /* Biru paling gelap */
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
     }
 
     th {
@@ -199,42 +209,29 @@
       font-weight: 600;
       font-size: 0.9rem;
       letter-spacing: 0.05em;
+      border-right: 1px solid rgba(255,255,255,0.1);
     }
+    th:last-child { border-right: none; }
 
     td {
       padding: 1rem;
       border-bottom: 1px solid var(--border);
+      border-right: 1px dashed #e2e8f0;
       vertical-align: middle;
-      transition: background-color 0.2s;
+      font-size: 0.9rem;
     }
-
-    tbody tr {
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
+    td:last-child { border-right: none; }
 
     tbody tr:hover {
-      background-color: #f1f5f9;
-      transform: scale(1.005);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      z-index: 10;
-      position: relative;
-      cursor: default;
+      background-color: #f8fafc;
     }
 
-    /* User Profile in Table */
+    /* User Profile */
     .user-cell {
       display: flex;
       align-items: center;
       gap: 1rem;
-    }
-
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid var(--secondary-blue);
-      background-color: #e2e8f0;
+      min-width: 180px;
     }
 
     .user-info {
@@ -252,16 +249,17 @@
       color: var(--text-muted);
     }
 
-    /* Thumbnail Absensi (New Column) */
+    /* Thumbnail Absensi */
     .thumb-wrapper {
       position: relative;
-      width: 120px;
-      height: 60px;
+      width: 90px;
+      height: 50px;
       border-radius: 6px;
       overflow: hidden;
       border: 1px solid var(--border);
       cursor: zoom-in;
       transition: all 0.2s;
+      background: #f1f5f9;
     }
 
     .thumb-wrapper:hover {
@@ -274,7 +272,6 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      /* As requested: format picture style handled via object-fit to maintain cleanliness in table row */
     }
 
     /* Badges */
@@ -282,34 +279,18 @@
       display: inline-flex;
       align-items: center;
       gap: 0.25rem;
-      padding: 0.35rem 0.75rem;
+      padding: 0.35rem 0.6rem;
       border-radius: 999px;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 600;
+      white-space: nowrap;
     }
 
-    .badge-late {
-      background-color: #fef2f2;
-      color: var(--danger);
-      border: 1px solid #fecaca;
-    }
-
-    .badge-ontime {
-      background-color: #ecfdf5;
-      color: var(--success);
-      border: 1px solid #a7f3d0;
-    }
-
-    .badge-forgot {
-      background-color: #fffbeb;
-      color: var(--warning);
-      border: 1px solid #fde68a;
-    }
-
-    .badge-neutral {
-      background-color: #f1f5f9;
-      color: var(--text-muted);
-    }
+    .badge-late { background-color: #fef2f2; color: var(--danger); border: 1px solid #fecaca; }
+    .badge-ontime { background-color: #ecfdf5; color: var(--success); border: 1px solid #a7f3d0; }
+    .badge-forgot { background-color: #fffbeb; color: var(--warning); border: 1px solid #fde68a; }
+    .badge-pulang { background-color: #f3f4f6; color: #4b5563; border: 1px solid #d1d5db; }
+    .badge-neutral { background-color: #f8fafc; color: #94a3b8; border: 1px dashed #cbd5e1; font-weight: 500;}
 
     /* Location Button */
     .btn-location {
@@ -321,161 +302,42 @@
       display: inline-flex;
       align-items: center;
       gap: 0.25rem;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       font-weight: 500;
       font-family: inherit;
+      white-space: nowrap;
     }
-    .btn-location:hover {
-      text-decoration: underline;
-    }
+    .btn-location:hover { text-decoration: underline; }
 
-    /* Empty & Loading States */
-    .empty-state, .loading-state {
-      text-align: center;
-      padding: 3rem;
-      color: var(--text-muted);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid #e2e8f0;
-      border-top: 4px solid var(--primary-blue);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Modal Overlay (Shared) */
+    /* Modals */
     .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.7); /* Darker for image view */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(4px);
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2000; opacity: 0; visibility: hidden;
+      transition: all 0.3s ease; backdrop-filter: blur(4px);
     }
-
-    .modal-overlay.show {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    /* Modal Content */
+    .modal-overlay.show { opacity: 1; visibility: visible; }
     .modal-content {
-      background: white;
-      width: 90%;
-      max-width: 800px;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      transform: scale(0.95);
-      transition: transform 0.3s ease;
-      display: flex;
-      flex-direction: column;
+      background: white; width: 90%; max-width: 800px;
+      border-radius: 16px; overflow: hidden; transform: scale(0.95);
+      transition: transform 0.3s ease; display: flex; flex-direction: column;
     }
+    .modal-content.image-view { background: transparent; box-shadow: none; max-width: 1000px; align-items: center; }
+    .modal-overlay.show .modal-content { transform: scale(1); }
+    .modal-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .image-modal-header { position: absolute; top: 20px; right: 20px; z-index: 2010; }
     
-    .modal-content.image-view {
-      background: transparent;
-      box-shadow: none;
-      max-width: 1000px;
-      align-items: center;
-    }
-
-    .modal-overlay.show .modal-content {
-      transform: scale(1);
-    }
-
-    .modal-header {
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: white;
-      width: 100%;
-    }
+    .btn-close { background: white; border: none; cursor: pointer; color: var(--text-muted); padding: 0.5rem; border-radius: 50%; display: flex; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .btn-close:hover { background-color: #f1f5f9; color: var(--danger); }
     
-    .image-modal-header {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        z-index: 2010;
-    }
+    #map-container { height: 400px; width: 100%; background-color: #f8fafc; }
+    #full-image { max-width: 100%; max-height: 85vh; border-radius: 8px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); background: #f0f0f0; }
+    
+    .footer { margin-top: 2rem; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
 
-    .modal-title {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--text-main);
-    }
-
-    .btn-close {
-      background: white;
-      border: none;
-      cursor: pointer;
-      color: var(--text-muted);
-      padding: 0.5rem;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    .btn-close:hover {
-      background-color: #f1f5f9;
-      color: var(--danger);
-    }
-
-    #map-container {
-      height: 400px;
-      width: 100%;
-      background-color: #f8fafc;
-    }
-
-    #full-image {
-        max-width: 100%;
-        max-height: 85vh;
-        border-radius: 8px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        background: #f0f0f0;
-    }
-
-    /* Footer */
-    .footer {
-      margin-top: 2rem;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    /* Animations */
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
@@ -492,19 +354,16 @@
         <label><i data-lucide="search" style="width: 14px;"></i> Cari Nama</label>
         <input type="text" id="searchInput" placeholder="Ketik nama siswa...">
       </div>
-
       <div class="input-group">
         <label><i data-lucide="calendar" style="width: 14px;"></i> Tanggal Mulai</label>
         <input type="date" id="startDateInput">
       </div>
-
       <div class="input-group">
         <label><i data-lucide="calendar" style="width: 14px;"></i> Tanggal Akhir</label>
         <input type="date" id="endDateInput">
       </div>
-
       <div class="input-group">
-        <label><i data-lucide="filter" style="width: 14px;"></i> Jenis Absensi</label>
+        <label><i data-lucide="filter" style="width: 14px;"></i> Jenis Absen Datang</label>
         <select id="statusFilter">
           <option value="all">Semua Status</option>
           <option value="ontime">Tepat Waktu</option>
@@ -512,8 +371,6 @@
           <option value="forgot">Lupa Absen</option>
         </select>
       </div>
-
-      <!-- Reset Button -->
       <button class="btn-reset" id="resetBtn">
         <i data-lucide="rotate-ccw" width="16"></i> Reset Filter
       </button>
@@ -525,22 +382,28 @@
         <table>
           <thead>
             <tr>
-              <th>Siswa</th>
-              <th>Hari / Tanggal</th>
-              <th>Jam</th>
-              <th>Foto</th> <!-- New Column -->
-              <th>Status</th>
-              <th>Lokasi</th>
+              <th rowspan="2">Siswa</th>
+              <th rowspan="2" style="min-width: 140px;">Hari / Tanggal</th>
+              <th colspan="4" class="group-datang">ABSEN DATANG</th>
+              <th colspan="4" class="group-pulang">ABSEN PULANG</th>
+            </tr>
+            <tr>
+              <!-- Datang -->
+              <th style="background: rgba(255,255,255,0.05);">Jam</th>
+              <th style="background: rgba(255,255,255,0.05);">Foto</th>
+              <th style="background: rgba(255,255,255,0.05);">Status</th>
+              <th style="background: rgba(255,255,255,0.05);">Lokasi</th>
+              <!-- Pulang -->
+              <th style="background: rgba(255,255,255,0.1);">Jam</th>
+              <th style="background: rgba(255,255,255,0.1);">Foto</th>
+              <th style="background: rgba(255,255,255,0.1);">Status</th>
+              <th style="background: rgba(255,255,255,0.1);">Lokasi</th>
             </tr>
           </thead>
           <tbody id="attendanceBody">
-            <!-- Loading state initially -->
             <tr>
-                <td colspan="6">
-                    <div class="loading-state">
-                        <div class="loading-spinner"></div>
-                        <div>Memuat data absensi...</div>
-                    </div>
+                <td colspan="10" style="text-align:center; padding: 3rem; color: #64748b;">
+                    Memuat data absensi...
                 </td>
             </tr>
           </tbody>
@@ -558,20 +421,16 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="modal-title" id="mapModalTitle">Lokasi Siswa</div>
-        <button class="btn-close" onclick="closeMap()">
-          <i data-lucide="x" width="20"></i>
-        </button>
+        <button class="btn-close" onclick="closeMap()"><i data-lucide="x" width="20"></i></button>
       </div>
       <div id="map-container"></div>
     </div>
   </div>
 
-  <!-- Image Modal (New) -->
+  <!-- Image Modal -->
   <div class="modal-overlay" id="imageModal" onclick="closeImageModal(event)">
     <div class="image-modal-header">
-         <button class="btn-close" onclick="closeImageModal(event, true)">
-          <i data-lucide="x" width="24"></i>
-        </button>
+         <button class="btn-close" onclick="closeImageModal(event, true)"><i data-lucide="x" width="24"></i></button>
     </div>
     <div class="modal-content image-view">
       <img src="" id="full-image" alt="Bukti Absensi">
@@ -579,284 +438,234 @@
     </div>
   </div>
 
-  <!-- Toast Notification Container -->
+  <!-- Toast -->
   <div id="toast" class="toast">
     <i id="toast-icon" data-lucide="info"></i>
     <span id="toast-message">Notification message</span>
   </div>
 
   <script>
-    // --- State ---
     let globalData = [];
-    let map = null; // Leaflet map instance
-    let currentMarker = null; // Current marker on map
+    let map = null; 
+    let currentMarker = null; 
     
-    // --- Mock Data (Fallback) ---
+    // --- Data Demo ---
     const MOCK_DATA_FALLBACK = [
-      {
-        id: 101,
-        username: "sarah_k",
-        nama: "Sarah Kusumawardhani",
-        foto_url: "img/foto_datang.jpg", // Example local path
-        status: "Masuk (Tepat Waktu)",
-        tanggal: "26 Januari 2026",
-        jam: "07.45",
-        hari: "Senin",
-        lokasi_lat: -6.175392, 
-        lokasi_long: 106.827153
-      },
-      {
-        id: 102,
-        username: "budi_s",
-        nama: "Budi Santoso",
-        foto_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Budi",
-        status: "Masuk (Terlambat)",
-        tanggal: "26 Januari 2026",
-        jam: "08.15",
-        hari: "Senin",
-        lokasi_lat: -6.2088,
-        lokasi_long: 106.8456
-      },
-      {
-        id: 103,
-        username: "ani_m",
-        nama: "Ani Maryani",
-        foto_url: "",
-        status: "Tanpa Keterangan (Lupa Absen)",
-        tanggal: "26 Januari 2026",
-        jam: "-",
-        hari: "Senin",
-        lokasi_lat: 0,
-        lokasi_long: 0
-      }
+      { id: 101, username: "naysella_y", nama: "Naysella Yuan Marsha", foto_url: "https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=300", status: "Terlambat", tanggal: "19 Februari 2026", jam: "11.03", hari: "Kamis", lokasi_lat: -6.175392, lokasi_long: 106.827153 },
+      { id: 102, username: "naysella_y", nama: "Naysella Yuan Marsha", foto_url: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300", status: "Pulang", tanggal: "19 Februari 2026", jam: "11.06", hari: "Kamis", lokasi_lat: -6.175400, lokasi_long: 106.827200 },
+      { id: 103, username: "budi_s", nama: "Budi Santoso", foto_url: "", status: "Tepat Waktu", tanggal: "19 Februari 2026", jam: "06.45", hari: "Kamis", lokasi_lat: -6.2088, lokasi_long: 106.8456 }
     ];
 
-    // --- Select DOM Elements ---
     const tableBody = document.getElementById('attendanceBody');
     const searchInput = document.getElementById('searchInput');
     const startDateInput = document.getElementById('startDateInput');
     const endDateInput = document.getElementById('endDateInput');
     const statusFilter = document.getElementById('statusFilter');
     const resetBtn = document.getElementById('resetBtn');
-    const yearSpan = document.getElementById('year');
-    const toast = document.getElementById('toast');
-    const toastMessage = document.getElementById('toast-message');
-    
-    // Modals
-    const mapModal = document.getElementById('mapModal');
-    const mapModalTitle = document.getElementById('mapModalTitle');
-    const imageModal = document.getElementById('imageModal');
-    const fullImage = document.getElementById('full-image');
-    const imageCaption = document.getElementById('image-caption');
-
-    // --- Helper Functions ---
 
     function showToast(message, type = 'info') {
-        toastMessage.textContent = message;
+        const toast = document.getElementById('toast');
+        document.getElementById('toast-message').textContent = message;
         toast.className = `toast show ${type}`;
-        setTimeout(() => {
-            toast.className = 'toast'; // hide
-        }, 5000);
+        setTimeout(() => toast.className = 'toast', 5000);
     }
 
     function parseIndonesianDate(dateStr, timeStr) {
         if (!dateStr) return new Date();
-        const months = {
-            'Januari': 0, 'Februari': 1, 'Maret': 2, 'April': 3, 'Mei': 4, 'Juni': 5,
-            'Juli': 6, 'Agustus': 7, 'September': 8, 'Oktober': 9, 'November': 10, 'Desember': 11
-        };
+        const months = { 'Januari':0, 'Februari':1, 'Maret':2, 'April':3, 'Mei':4, 'Juni':5, 'Juli':6, 'Agustus':7, 'September':8, 'Oktober':9, 'November':10, 'Desember':11 };
         try {
             const parts = dateStr.split(' '); 
             if (parts.length < 3) return new Date(); 
             const day = parseInt(parts[0]);
             const month = months[parts[1]] !== undefined ? months[parts[1]] : 0;
             const year = parseInt(parts[2]);
-
-            let hour = 0, minute = 0;
-            if (timeStr && timeStr !== '-' && timeStr.trim() !== '') {
-                const cleanTime = timeStr.replace('.', ':');
-                const timeParts = cleanTime.split(':');
-                hour = parseInt(timeParts[0]) || 0;
-                minute = parseInt(timeParts[1]) || 0;
-            }
-            return new Date(year, month, day, hour, minute);
-        } catch (e) {
-            return new Date();
-        }
+            return new Date(year, month, day, 0, 0); // Ignore time for filtering
+        } catch (e) { return new Date(); }
     }
 
     function getStatusBadge(status) {
-      if (!status) return `<span class="badge badge-neutral">-</span>`;
-      const lowerStatus = status.toLowerCase();
-      
-      if (lowerStatus.includes("terlambat")) {
-        return `<span class="badge badge-late"><i data-lucide="alert-circle" width="14"></i> Terlambat</span>`;
-      }
-      if (lowerStatus.includes("tepat waktu")) {
-        return `<span class="badge badge-ontime"><i data-lucide="check-circle" width="14"></i> Tepat Waktu</span>`;
-      }
-      if (lowerStatus.includes("lupa") || lowerStatus.includes("tanpa") || lowerStatus.includes("alpha")) {
-        return `<span class="badge badge-forgot"><i data-lucide="help-circle" width="14"></i> Lupa Absen</span>`;
-      }
+      if (!status || status === 'Belum Absen') return `<span class="badge badge-neutral">Belum Ada</span>`;
+      const lower = status.toLowerCase();
+      if (lower.includes("terlambat")) return `<span class="badge badge-late"><i data-lucide="alert-circle" width="12"></i> Terlambat</span>`;
+      if (lower.includes("tepat waktu")) return `<span class="badge badge-ontime"><i data-lucide="check-circle" width="12"></i> Tepat Waktu</span>`;
+      if (lower.includes("pulang")) return `<span class="badge badge-pulang"><i data-lucide="log-out" width="12"></i> Pulang</span>`;
+      if (lower.includes("lupa") || lower.includes("tanpa") || lower.includes("alpha")) return `<span class="badge badge-forgot"><i data-lucide="help-circle" width="12"></i> Lupa Absen</span>`;
       return `<span class="badge badge-neutral">${status}</span>`;
     }
 
     function getLocationHtml(lat, long, name) {
       const latitude = parseFloat(lat);
       const longitude = parseFloat(long);
-      
       if (latitude && longitude && (latitude !== 0 || longitude !== 0)) {
         const safeName = name.replace(/'/g, "\\'");
-        return `
-          <button onclick="openMap(${latitude}, ${longitude}, '${safeName}')" 
-             class="btn-location">
-            <i data-lucide="map-pin" width="16"></i> Lihat Lokasi
-          </button>`;
+        return `<button onclick="openMap(${latitude}, ${longitude}, '${safeName}')" class="btn-location"><i data-lucide="map-pin" width="14"></i> Map</button>`;
       }
-      return `<span style="color: #94a3b8; font-size: 0.9rem;">-</span>`;
+      return `<span style="color: #cbd5e1; font-size: 0.8rem;">-</span>`;
     }
     
-    // --- Image Modal Logic ---
+    function getPhotoHtml(url, name, type) {
+        if(url && url.trim() !== '') {
+            return `
+            <div class="thumb-wrapper" onclick="openImageModal('${url}', '${name} (${type})')">
+                <img src="${url}" class="thumb-img" alt="Foto" onerror="this.src='https://via.placeholder.com/150x60?text=No+Img'">
+            </div>`;
+        }
+        return `<span style="color:#cbd5e1; font-size:0.8rem">-</span>`;
+    }
+
+    // --- Fungsi Pengelompokan Data (Datang & Pulang) ---
+    function groupDataByDay(dataArray) {
+        const grouped = {};
+
+        dataArray.forEach(item => {
+            // Kunci grouping: username + tanggal
+            const key = `${item.username}_${item.tanggal}`;
+            
+            if (!grouped[key]) {
+                grouped[key] = {
+                    username: item.username,
+                    nama: item.nama,
+                    hari: item.hari,
+                    tanggal: item.tanggal,
+                    datang: null,
+                    pulang: null
+                };
+            }
+
+            const isPulang = (item.status || "").toLowerCase().includes("pulang");
+            const record = {
+                jam: item.jam,
+                foto_url: item.foto_url,
+                status: item.status,
+                lat: item.lokasi_lat,
+                long: item.lokasi_long
+            };
+
+            if (isPulang) {
+                grouped[key].pulang = record;
+            } else {
+                grouped[key].datang = record;
+            }
+        });
+
+        return Object.values(grouped);
+    }
+
     window.openImageModal = function(url, name) {
         if (!url) return;
-        fullImage.src = url;
-        // Handle error if image not found in modal
-        fullImage.onerror = function() {
-            this.src = 'https://via.placeholder.com/800x600?text=Foto+Tidak+Ditemukan';
-        }
-        imageCaption.textContent = name;
-        imageModal.classList.add('show');
+        document.getElementById('full-image').src = url;
+        document.getElementById('image-caption').textContent = name;
+        document.getElementById('imageModal').classList.add('show');
     }
 
     window.closeImageModal = function(e, force = false) {
-        // Close if clicked on overlay (background) or force close button
-        if (force || e.target === imageModal) {
-            imageModal.classList.remove('show');
-            setTimeout(() => { fullImage.src = ''; }, 300); // clear src after fade out
+        const modal = document.getElementById('imageModal');
+        if (force || e.target === modal) {
+            modal.classList.remove('show');
+            setTimeout(() => document.getElementById('full-image').src = '', 300);
         }
     }
 
-    // --- Map Logic (Leaflet) ---
     window.openMap = function(lat, lng, name) {
+        const mapModal = document.getElementById('mapModal');
         mapModal.classList.add('show');
-        mapModalTitle.textContent = `Lokasi: ${name}`;
-
+        document.getElementById('mapModalTitle').textContent = `Lokasi: ${name}`;
         if (!map) {
             map = L.map('map-container').setView([lat, lng], 15);
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; OpenStreetMap'
-            }).addTo(map);
-        } else {
-            map.setView([lat, lng], 15);
-        }
-
-        if (currentMarker) {
-            map.removeLayer(currentMarker);
-        }
-
-        currentMarker = L.marker([lat, lng]).addTo(map)
-            .bindPopup(`<b>${name}</b><br>Lat: ${lat}<br>Long: ${lng}`)
-            .openPopup();
-        
-        setTimeout(() => {
-            map.invalidateSize();
-        }, 200);
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        } else { map.setView([lat, lng], 15); }
+        if (currentMarker) map.removeLayer(currentMarker);
+        currentMarker = L.marker([lat, lng]).addTo(map).bindPopup(`<b>${name}</b>`).openPopup();
+        setTimeout(() => map.invalidateSize(), 200);
     }
+    window.closeMap = function() { document.getElementById('mapModal').classList.remove('show'); }
+    document.getElementById('mapModal').addEventListener('click', (e) => { if (e.target.id === 'mapModal') closeMap(); });
 
-    window.closeMap = function() {
-        mapModal.classList.remove('show');
-    }
-    
-    mapModal.addEventListener('click', (e) => {
-        if (e.target === mapModal) closeMap();
-    });
-
-    // --- Table & Filtering ---
-    function renderTable(data) {
+    // Render tabel dari data yang sudah di-group
+    function renderTable(groupedData) {
       tableBody.innerHTML = '';
-      if (data.length === 0) {
-        tableBody.innerHTML = `
-          <tr>
-            <td colspan="6">
-              <div class="empty-state">
-                <i data-lucide="search-x" width="48" color="#cbd5e1"></i>
-                <div>Data tidak ditemukan.</div>
-              </div>
-            </td>
-          </tr>
-        `;
+      if (groupedData.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding: 3rem; color: #94a3b8;">Data tidak ditemukan.</td></tr>`;
       } else {
-        const rowsHtml = data.map(item => {
-            // Logic untuk URL Gambar: Gunakan item.foto_url apa adanya
-            // Jika kosong, gunakan placeholder
-            const photoUrl = item.foto_url|| '';
-            console.log(photoUrl)
-            const avatarUrl = photoUrl || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(item.nama);
-            
+        const rowsHtml = groupedData.map(group => {
+            // Data Datang
+            const d_jam = group.datang ? group.datang.jam : '-';
+            const d_status = group.datang ? group.datang.status : 'Belum Absen';
+            const d_loc = group.datang ? getLocationHtml(group.datang.lat, group.datang.long, group.nama) : '-';
+            const d_foto = group.datang ? getPhotoHtml(group.datang.foto_url, group.nama, 'Datang') : '-';
+
+            // Data Pulang
+            const p_jam = group.pulang ? group.pulang.jam : '-';
+            const p_status = group.pulang ? group.pulang.status : 'Belum Absen';
+            const p_loc = group.pulang ? getLocationHtml(group.pulang.lat, group.pulang.long, group.nama) : '-';
+            const p_foto = group.pulang ? getPhotoHtml(group.pulang.foto_url, group.nama, 'Pulang') : '-';
+
             return `
             <tr>
-            <td>
-                <div class="user-cell">
-                  <div class="user-info">
-                      <span class="username">${item.nama}</span>
-                      <span class="user-id">@${item.username}</span>
+              <td>
+                  <div class="user-cell">
+                    <div class="user-info">
+                        <span class="username">${group.nama}</span>
+                        <span class="user-id">@${group.username}</span>
+                    </div>
                   </div>
-                </div>
-            </td>
-            <td>
-                <div style="font-weight: 500;">${item.hari}</div>
-                <div style="font-size: 0.85rem; color: #64748b;">${item.tanggal}</div>
-            </td>
-            <td>
-                <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: bold; color: #1e40af;">
-                <i data-lucide="clock" width="16"></i>
-                ${item.jam}
-                </div>
-            </td>
-            <td>
-                <!-- Kolom Foto Baru -->
-                ${photoUrl ? `
-                <div class="thumb-wrapper" onclick="openImageModal('${photoUrl}', '${item.nama}')">
-                    <img src="${photoUrl}" class="thumb-img" alt="Foto" 
-                         onerror="this.src='https://via.placeholder.com/150x60?text=No+Img'">
-                </div>
-                ` : `<span style="color:#cbd5e1; font-size:0.8rem">Tidak ada foto</span>`}
-            </td>
-            <td>
-                ${getStatusBadge(item.status)}
-            </td>
-            <td>
-                ${getLocationHtml(item.lokasi_lat, item.lokasi_long, item.nama)}
-            </td>
+              </td>
+              <td>
+                  <div style="font-weight: 600; color: #334155;">${group.hari}</div>
+                  <div style="font-size: 0.8rem; color: #64748b;">${group.tanggal}</div>
+              </td>
+              
+              <!-- Kolom Datang -->
+              <td style="font-weight: bold; color: #1e40af;">
+                ${d_jam !== '-' ? `<div style="display: flex; align-items: center; gap: 0.3rem;"><i data-lucide="clock" width="14"></i> <span>${d_jam}</span></div>` : '-'}
+              </td>
+              <td>${d_foto}</td>
+              <td>${getStatusBadge(d_status)}</td>
+              <td>${d_loc}</td>
+
+              <!-- Kolom Pulang -->
+              <td style="font-weight: bold; color: #0f172a;">
+                ${p_jam !== '-' ? `<div style="display: flex; align-items: center; gap: 0.3rem;"><i data-lucide="clock" width="14"></i> <span>${p_jam}</span></div>` : '-'}
+              </td>
+              <td>${p_foto}</td>
+              <td>${getStatusBadge(p_status)}</td>
+              <td>${p_loc}</td>
             </tr>
         `}).join('');
         tableBody.innerHTML = rowsHtml;
       }
       if (window.lucide) window.lucide.createIcons();
     }
+      if (window.lucide) window.lucide.createIcons();
+    
 
     function filterData() {
+      // 1. Grouping seluruh data mentah terlebih dahulu
+      const groupedAll = groupDataByDay(globalData);
+
+      // 2. Terapkan filter pada data yang sudah di-group
       const searchTerm = searchInput.value.toLowerCase();
       const startVal = startDateInput.value ? new Date(startDateInput.value) : null;
       const endVal = endDateInput.value ? new Date(endDateInput.value) : null;
       if (endVal) endVal.setHours(23, 59, 59);
-      
       const statusVal = statusFilter.value;
 
-      const filtered = globalData.filter(item => {
-        const matchesName = (item.nama || "").toLowerCase().includes(searchTerm);
-        const itemDate = parseIndonesianDate(item.tanggal, item.jam);
+      const filtered = groupedAll.filter(group => {
+        const matchesName = (group.nama || "").toLowerCase().includes(searchTerm);
+        const groupDate = parseIndonesianDate(group.tanggal, '00:00');
 
         let matchesDateRange = true;
-        if (startVal) matchesDateRange = matchesDateRange && itemDate >= startVal;
-        if (endVal) matchesDateRange = matchesDateRange && itemDate <= endVal;
+        if (startVal) matchesDateRange = matchesDateRange && groupDate >= startVal;
+        if (endVal) matchesDateRange = matchesDateRange && groupDate <= endVal;
 
+        // Filter berdasarkan status DATANG (bisa disesuaikan jika ingin filter kepulangan juga)
         let matchesStatus = true;
-        const lowerStatus = (item.status || "").toLowerCase();
-        if (statusVal === "late") matchesStatus = lowerStatus.includes("terlambat");
-        else if (statusVal === "ontime") matchesStatus = lowerStatus.includes("tepat waktu");
-        else if (statusVal === "forgot") matchesStatus = lowerStatus.includes("lupa") || lowerStatus.includes("tanpa") || lowerStatus.includes("alpha");
+        if (statusVal !== "all") {
+            const lowerStatus = group.datang ? group.datang.status.toLowerCase() : "";
+            if (statusVal === "late") matchesStatus = lowerStatus.includes("terlambat");
+            else if (statusVal === "ontime") matchesStatus = lowerStatus.includes("tepat waktu");
+            else if (statusVal === "forgot") matchesStatus = lowerStatus.includes("lupa") || lowerStatus.includes("tanpa");
+        }
 
         return matchesName && matchesDateRange && matchesStatus;
       });
@@ -865,65 +674,33 @@
     }
 
     function resetFilters() {
-        searchInput.value = '';
-        startDateInput.value = '';
-        endDateInput.value = '';
-        statusFilter.value = 'all';
-        filterData();
-        showToast("Filter telah direset.", "success");
+        searchInput.value = ''; startDateInput.value = ''; endDateInput.value = ''; statusFilter.value = 'all';
+        filterData(); showToast("Filter telah direset.", "success");
     }
 
-    // --- Data Fetching ---
     async function fetchData() {
         if (window.location.protocol === 'file:') {
-            console.warn("Running via file:// protocol. PHP backend unavailable. Using Mock Data.");
-            globalData = MOCK_DATA_FALLBACK;
-            filterData();
-            showToast("Mode Demo: Buka via localhost/XAMPP untuk koneksi database.", "warning");
-            return;
+            globalData = MOCK_DATA_FALLBACK; filterData();
+            showToast("Mode Demo Aktif.", "warning"); return;
         }
-
         try {
             const response = await fetch('api.php');
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const contentType = response.headers.get("content-type");
-            if (!contentType || !contentType.includes("application/json")) {
-               throw new Error("Response not JSON");
-            }
-
+            if (!response.ok) throw new Error("HTTP Error");
             const jsonData = await response.json();
-
-            if (jsonData.error) {
-                console.error("Database Error:", jsonData.error);
-                globalData = MOCK_DATA_FALLBACK;
-                showToast("Gagal koneksi database. Menggunakan data demo.", "error");
-            } else {
-                globalData = jsonData;
-                showToast("Berhasil terhubung ke database!", "success");
-            }
-
+            if (jsonData.error) { globalData = MOCK_DATA_FALLBACK; showToast("Gagal db, mode demo.", "error"); } 
+            else { globalData = jsonData; }
         } catch (error) {
-            console.error("Fetch/Network Error:", error);
-            globalData = MOCK_DATA_FALLBACK;
-            showToast("Gagal koneksi server (api.php). Mode Demo Aktif.", "warning");
-        } finally {
-            filterData();
-        }
+            globalData = MOCK_DATA_FALLBACK; showToast("Mode Demo Aktif.", "warning");
+        } finally { filterData(); }
     }
 
-    // --- Event Listeners ---
     searchInput.addEventListener('input', filterData);
     statusFilter.addEventListener('change', filterData);
     startDateInput.addEventListener('change', filterData);
     endDateInput.addEventListener('change', filterData);
     resetBtn.addEventListener('click', resetFilters);
 
-    // --- Initialization ---
-    yearSpan.textContent = new Date().getFullYear().toString();
+    document.getElementById('year').textContent = new Date().getFullYear().toString();
     fetchData();
 
   </script>
