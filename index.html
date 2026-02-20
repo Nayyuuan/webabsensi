@@ -481,6 +481,69 @@
         transform: translateY(0);
       }
     }
+
+    /* --- CSS TAMBAHAN UNTUK PAGINATION --- */
+    .pagination-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.5rem;
+      padding: 0 0.5rem;
+      gap: 1rem;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .per-page-selector label {
+      display: inline-flex;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .per-page-selector select {
+      width: auto;
+      padding: 0.4rem 2rem 0.4rem 1rem;
+      margin-left: 0.5rem;
+      display: inline-block;
+    }
+
+    .pagination-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .pagination-buttons button {
+      padding: 0.5rem 0.8rem;
+      border: 1px solid var(--border);
+      background-color: white;
+      color: var(--text-main);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pagination-buttons button:hover:not(:disabled) {
+      background-color: var(--bg-blue);
+      border-color: var(--secondary-blue);
+      color: var(--primary-blue);
+    }
+
+    .pagination-buttons button.active {
+      background-color: var(--primary-blue);
+      color: white;
+      border-color: var(--primary-blue);
+    }
+
+    .pagination-buttons button:disabled {
+      background-color: #f8fafc;
+      color: #cbd5e1;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 
@@ -556,6 +619,21 @@
       </div>
     </section>
 
+    <div class="pagination-container">
+      <div class="per-page-selector">
+        <label for="perPage">
+          Tampilkan:
+          <select id="perPage">
+            <option value="5">5 Baris</option>
+            <option value="10">10 Baris</option>
+            <option value="25">25 Baris</option>
+          </select>
+        </label>
+      </div>
+      <div class="pagination-buttons" id="pagination">
+      </div>
+    </div>
+
     <div class="footer">
       &copy; <span id="year"></span> Sistem Informasi Kehadiran. All rights reserved.
     </div>
@@ -595,6 +673,11 @@
     let map = null;
     let currentMarker = null;
 
+    // --- VARIABEL UNTUK PAGINATION ---
+    let currentPage = 1;
+    let itemsPerPage = 5;
+    let filteredDataCache = []; // Menyimpan data yang sudah difilter
+
     // --- Data Demo ---
     const MOCK_DATA_FALLBACK = [
       { id: 101, username: "naysella_y", nama: "Naysella Yuan Marsha", foto_url: "https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=300", status: "Terlambat", tanggal: "19 Februari 2026", jam: "11.03", hari: "Kamis", lokasi_lat: -6.175392, lokasi_long: 106.827153 },
@@ -630,12 +713,12 @@
     }
 
     function getStatusBadge(status) {
-      if (!status || status === 'Belum Absen') return `<span class="badge badge-neutral">Belum Ada</span>`;
+      if (!status) return `<span class="badge badge-neutral">Belum Absen</span>`;
       const lower = status.toLowerCase();
-      if (lower.includes("terlambat")) return `<span class="badge badge-late"><i data-lucide="alert-circle" width="12"></i> Terlambat</span>`;
-      if (lower.includes("tepat waktu")) return `<span class="badge badge-ontime"><i data-lucide="check-circle" width="12"></i> Tepat Waktu</span>`;
-      if (lower.includes("pulang")) return `<span class="badge badge-pulang"><i data-lucide="log-out" width="12"></i> Pulang</span>`;
-      if (lower.includes("lupa") || lower.includes("tanpa") || lower.includes("alpha")) return `<span class="badge badge-forgot"><i data-lucide="help-circle" width="12"></i> Lupa Absen</span>`;
+      if (lower.includes("masuk (terlambat)")) return `<span class="badge badge-late"><i data-lucide="alert-circle" width="12"></i>${status}</span>`;
+      if (lower.includes("masuk (tepat waktu)")) return `<span class="badge badge-ontime"><i data-lucide="check-circle" width="12"></i>${status}</span>`;
+      if (lower.includes("pulang (tepat waktu)")) return `<span class="badge badge-ontime"><i data-lucide="log-out" width="12"></i>${status}</span>`;
+      if (lower.includes("pulang (meninggalkan kbm)")) return `<span class="badge badge-late"><i data-lucide="log-out" width="12"></i>${status}</span>`;
       return `<span class="badge badge-neutral">${status}</span>`;
     }
 
@@ -784,6 +867,56 @@
     }
     if (window.lucide) window.lucide.createIcons();
 
+    // Fungsi untuk memotong data sesuai halaman dan menampilkannya
+    function updateView() {
+      const totalItems = filteredDataCache.length;
+      const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+
+      // Keamanan agar halaman tidak bablas
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      // Rumus memotong data (slice)
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const paginatedData = filteredDataCache.slice(startIndex, endIndex);
+
+      // Render tabel hanya untuk data yang terpotong
+      renderTable(paginatedData);
+      renderPaginationControls(totalPages);
+    }
+
+    // Fungsi untuk membuat tombol-tombol angka halamannya
+    function renderPaginationControls(totalPages) {
+      const paginationEl = document.getElementById('pagination');
+      if (!paginationEl) return;
+      paginationEl.innerHTML = '';
+
+      // Tombol Mundur (Prev)
+      const prevBtn = document.createElement('button');
+      prevBtn.innerHTML = '<i data-lucide="chevron-left" width="16"></i>';
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.onclick = () => { if (currentPage > 1) { currentPage--; updateView(); } };
+      paginationEl.appendChild(prevBtn);
+
+      // Tombol Angka (1, 2, 3...)
+      for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.textContent = i;
+        if (i === currentPage) pageBtn.classList.add('active');
+        pageBtn.onclick = () => { currentPage = i; updateView(); };
+        paginationEl.appendChild(pageBtn);
+      }
+
+      // Tombol Maju (Next)
+      const nextBtn = document.createElement('button');
+      nextBtn.innerHTML = '<i data-lucide="chevron-right" width="16"></i>';
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.onclick = () => { if (currentPage < totalPages) { currentPage++; updateView(); } };
+      paginationEl.appendChild(nextBtn);
+
+      if (window.lucide) window.lucide.createIcons();
+    }
 
     function filterData() {
       // 1. Grouping seluruh data mentah terlebih dahulu
@@ -808,7 +941,8 @@
 
       const statusVal = statusFilter.value;
 
-      const filtered = groupedAll.filter(group => {
+      // Simpan hasil filter ke variabel global baru kita
+      filteredDataCache = groupedAll.filter(group => {
         const matchesName = (group.nama || "").toLowerCase().includes(searchTerm);
         const groupDate = parseIndonesianDate(group.tanggal, '00:00');
 
@@ -818,27 +952,21 @@
 
         let matchesStatus = true;
         if (statusVal !== "all") {
-          // Siapkan dua variabel untuk membaca status datang dan pulang
           const statusDatang = group.datang ? (group.datang.status || "").toLowerCase() : "";
           const statusPulang = group.pulang ? (group.pulang.status || "").toLowerCase() : "";
 
-          if (statusVal === "late") {
-            // Cek di data Datang
-            matchesStatus = statusDatang.includes("terlambat");
-          } else if (statusVal === "ontimein") {
-            // Cek di data Datang
-            matchesStatus = statusDatang.includes("tepat waktu");
-          } else if (statusVal === "ontimeout") {
-            // Cek di data Pulang
-            matchesStatus = statusPulang.includes("pulang") || statusPulang.includes("tepat waktu");
-          } else if (statusVal === "forgot") {
-            // Cek di data Pulang
-            matchesStatus = statusPulang.includes("meninggalkan kbm") || statusPulang.includes("lupa") || statusPulang.includes("tanpa");
-          }
+          if (statusVal === "late") matchesStatus = statusDatang.includes("terlambat");
+          else if (statusVal === "ontimein") matchesStatus = statusDatang.includes("tepat waktu");
+          else if (statusVal === "ontimeout") matchesStatus = statusPulang.includes("pulang") || statusPulang.includes("tepat waktu");
+          else if (statusVal === "forgot") matchesStatus = statusPulang.includes("meninggalkan kbm") || statusPulang.includes("lupa") || statusPulang.includes("tanpa");
         }
 
         return matchesName && matchesDateRange && matchesStatus;
       });
+
+      // Kembalikan ke halaman 1 setiap kali filter diubah, lalu perbarui tampilan
+      currentPage = 1;
+      updateView();
 
       renderTable(filtered);
     }
@@ -869,6 +997,11 @@
     startDateInput.addEventListener('change', filterData);
     endDateInput.addEventListener('change', filterData);
     resetBtn.addEventListener('click', resetFilters);
+    document.getElementById('perPage').addEventListener('change', function (e) {
+      itemsPerPage = parseInt(e.target.value);
+      currentPage = 1; // Kembali ke halaman 1 saat baris diubah
+      updateView();
+    });
 
     document.getElementById('year').textContent = new Date().getFullYear().toString();
     fetchData();
