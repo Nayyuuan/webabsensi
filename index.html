@@ -955,10 +955,10 @@
           const statusDatang = group.datang ? (group.datang.status || "").toLowerCase() : "";
           const statusPulang = group.pulang ? (group.pulang.status || "").toLowerCase() : "";
 
-          if (statusVal === "late") matchesStatus = statusDatang.includes("terlambat");
-          else if (statusVal === "ontimein") matchesStatus = statusDatang.includes("tepat waktu");
-          else if (statusVal === "ontimeout") matchesStatus = statusPulang.includes("pulang") || statusPulang.includes("tepat waktu");
-          else if (statusVal === "forgot") matchesStatus = statusPulang.includes("meninggalkan kbm") || statusPulang.includes("lupa") || statusPulang.includes("tanpa");
+          if (statusVal === "late") matchesStatus = statusDatang.includes("masuk (terlambat)");
+          else if (statusVal === "ontimein") matchesStatus = statusDatang.includes("masuk (tepat waktu)");
+          else if (statusVal === "ontimeout") matchesStatus = statusPulang.includes("pulang (tepat waktu)");
+          else if (statusVal === "forgot") matchesStatus = statusPulang.includes("pulang (meninggalkan kbm)");
         }
 
         return matchesName && matchesDateRange && matchesStatus;
